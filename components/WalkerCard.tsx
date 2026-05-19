@@ -92,7 +92,7 @@ export default function WalkerCard({
         </div>
 
         {/* Gallery */}
-        <Gallery fotos={fotos} />
+        <Gallery fotos={fotos} onDelete={() => {}} />
 
         {/* Notas */}
         <div>
