@@ -18,8 +18,7 @@ export default function Search({ value, onChange }: SearchProps) {
           borderColor: '#C9A84C',
           color: '#5C4A2A',
           backgroundColor: 'white',
-          placeholderColor: '#5C4A2A',
-        }}
+          }}
       />
     </div>
   );
