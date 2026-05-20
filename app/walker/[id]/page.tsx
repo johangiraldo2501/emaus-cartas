@@ -50,16 +50,16 @@ export default function WalkerPage({ params }: { params: Promise<{ id: string }>
     if (upError) { alert('Error subiendo foto: ' + upError.message); return }
     const { data: urlData } = supabase.storage.from('fotos-caminantes').getPublicUrl(fileName)
     await supabase.from('fotos').insert({ caminante_id: id, url: urlData.publicUrl, storage_path: fileName })
-    const nuevoNum = (caminante?.num_fotos || 0) + 1
-    await supabase.from('caminantes').update({ num_fotos: nuevoNum }).eq('id', id)
+    const { count } = await supabase.from('fotos').select('*', { count: 'exact', head: true }).eq('caminante_id', id)
+await supabase.from('caminantes').update({ num_fotos: count || 0 }).eq('id', id)
     cargarDatos()
   }
 
   const eliminarFoto = async (foto: Foto) => {
     await supabase.storage.from('fotos-caminantes').remove([foto.storage_path])
     await supabase.from('fotos').delete().eq('id', foto.id)
-    const nuevoNum = Math.max(0, (caminante?.num_fotos || 1) - 1)
-    await supabase.from('caminantes').update({ num_fotos: nuevoNum }).eq('id', id)
+    const { count } = await supabase.from('fotos').select('*', { count: 'exact', head: true }).eq('caminante_id', id)
+await supabase.from('caminantes').update({ num_fotos: count || 0 }).eq('id', id)
     cargarDatos()
   }
 
