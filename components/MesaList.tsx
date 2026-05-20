@@ -13,16 +13,19 @@ export default function MesaList({ mesas, caminantes, searchQuery, onCaminanteCl
   const filteredCaminantes = (caminantes: Caminante[]) => {
     if (!searchQuery) return caminantes;
     return caminantes.filter(c =>
-      c.nombre.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  c.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .includes(searchQuery.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase())
+);
   };
 
   return (
-    <div className="space-y-6">
-      {mesas.map(mesa => {
-        const mesaCaminantes = filteredCaminantes(
-          caminantes.filter(c => c.mesa_id === mesa.id).sort((a, b) => a.nombre.localeCompare(b.nombre))
-        );
+  <div className="space-y-6">
+    {mesas.map(mesa => {
+      const mesaCaminantes = filteredCaminantes(
+        caminantes.filter(c => c.mesa_id === mesa.id).sort((a, b) => a.nombre.localeCompare(b.nombre))
+      );
+      
+      if (searchQuery && mesaCaminantes.length === 0) return null;
 
         return (
           <div key={mesa.id} className="bg-white border border-navy rounded-lg shadow-md overflow-hidden">
