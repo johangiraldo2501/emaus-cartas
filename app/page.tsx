@@ -45,7 +45,7 @@ export default function Home() {
 
   const totalCaminantes = caminantes.length;
   const totalCartas = caminantes.reduce((sum, c) => sum + (c.num_cartas || 0), 0);
-  const totalFotos = 0; // Fetch from fotos table if needed
+  const totalFotos = caminantes.reduce((sum, c) => sum + (c.num_fotos || 0), 0);
 
   if (loading) {
     return (
